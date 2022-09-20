@@ -1,5 +1,5 @@
 const config = {
-  api_key: 'd1c47c2f007f5c674e686a46ce295174',
+  api_key: 'ddb44769a9fa28d200546e7d28aa707c',
   url: 'https://api.themoviedb.org/3/',
   imgUrl: 'https://image.tmdb.org/t/p/w500/',
 };
