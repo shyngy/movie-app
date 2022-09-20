@@ -10,11 +10,11 @@ import { errorAlert } from './utils';
 import Tabs from './components/Tabs';
 
 interface AppState {
-  posts: [] | Post[] | null
-  currentPage: number
-  allPages: number
-  searchValue: string
-  postsLoading: boolean
+  posts: [] | Post[] | null;
+  currentPage: number;
+  allPages: number;
+  searchValue: string;
+  postsLoading: boolean;
 }
 
 class App extends React.Component<any, AppState> {
@@ -37,7 +37,7 @@ class App extends React.Component<any, AppState> {
     this.fetchData();
   }
 
-  setPostsState = (posts:AppState['posts']) => {
+  setPostsState = (posts: AppState['posts']) => {
     this.setState({ posts, allPages: posts?.length || 0 });
   };
 
@@ -46,8 +46,16 @@ class App extends React.Component<any, AppState> {
       const { currentPage, searchValue } = this.state;
 
       this.setState({ postsLoading: true, posts: null });
-      const post = await api.getPosts(page || currentPage, search || searchValue);
-      this.setState({ posts: post.results, currentPage: post.page, allPages: post.total_pages });
+
+      const newSearch = search || searchValue;
+      const post = await api.getPosts(page || currentPage, newSearch);
+      this.setState({
+        posts: post.results,
+        currentPage: post.page,
+        allPages: post.total_pages,
+        searchValue: newSearch,
+      });
+
       this.setState({ postsLoading: false });
     } catch (e) {
       if (e instanceof Error) {
@@ -63,24 +71,30 @@ class App extends React.Component<any, AppState> {
     return (
       <div className="App">
         <Space />
-        {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
-        <AppContext.Provider value={{
-          currentPage,
-          postsLoading,
-          allPages,
-          fetchData: this.fetchData,
-          searchValue,
-          setPostsState: this.setPostsState,
-        }}
+
+        <AppContext.Provider
+          value={{
+            currentPage,
+            postsLoading,
+            allPages,
+            fetchData: this.fetchData,
+            searchValue,
+            setPostsState: this.setPostsState,
+          }}
         >
           <div className="container">
-            <div className="fullWidth"><Tabs /></div>
-            <div className="fullWidth search"><Search /></div>
+            <div className="fullWidth">
+              <Tabs />
+            </div>
+            <div className="fullWidth search">
+              <Search />
+            </div>
             <MovieItems posts={posts} />
-            <div className="fullWidth pagination"><Pagination /></div>
+            <div className="fullWidth pagination">
+              <Pagination />
+            </div>
           </div>
         </AppContext.Provider>
-
       </div>
     );
   }
