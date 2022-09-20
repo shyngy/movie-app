@@ -41,7 +41,20 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --config ./prettierrc.json --write .",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": "npm run lint:fix",
+    "src/*": "prettier --config ./prettierrc.json --write ."
   },
   "eslintConfig": {
     "extends": [

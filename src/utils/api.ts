@@ -30,17 +30,13 @@ const api = {
 
   getGenre: (): Promise<Genres> => fetch(`${config.url}genre/movie/list?api_key=${config.api_key}`, {
   }).then((data) => {
-    console.log(data);
     if (!data.ok) { throw new Error('Error when searching genres'); }
     return data.json();
   })
-    .then((data: { genres: Genres[] }) => {
-      console.log(data);
-      return data.genres.reduce((acc: Genres, item) => {
-        acc[item.id] = item.name;
-        return acc;
-      }, {});
-    }),
+    .then((data: { genres: Genres[] }) => data.genres.reduce((acc: Genres, item) => {
+      acc[item.id] = item.name;
+      return acc;
+    }, {})),
 
   getPosts: async (page: number, searchValue: string) => {
     const post = await api.getPostData(page, searchValue);
